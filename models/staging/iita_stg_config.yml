@@ -1,0 +1,209 @@
+version: 2
+
+models:
+  - name: stg_users
+    description: >
+      Staging model for user data. This model is for downstream transformation and analysis, including personal information and registration info.
+
+    columns:
+      - name: id
+        description: >
+          Unique identifier assigned to each user.     
+        data_tests:
+          - not_null
+          - unique     
+
+      - name: first_name
+        description: >
+          The first name of the user.
+        data_tests:
+          - not_null
+
+      - name: last_name
+        description: >
+          The last name or surname of the user.
+        data_tests:
+          - not_null
+
+      - name: date_of_birth
+        description: >
+          The user's date of birth. Useful for age-related analysis and segmentation.
+
+      - name: gender
+        description: >
+          The user's gender as provided during registration.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['male', 'female']
+
+      - name: created_at
+        description: >
+          The timestamp indicating when the user account was created on the platform.
+
+  - name: stg_companies
+    description: >
+      Staging model for company data. This model contains information 
+      collected during onboarding, including identifiers, names, and organization size.
+
+    columns:
+      - name: id
+        description: >
+          Unique identifier assigned to each company.
+        data_tests:
+          - not_null
+          - unique
+
+      - name: name
+        description: >
+          The registered name of the company or corporation.
+        data_tests:
+          - not_null
+
+      - name: size
+        description: >
+          The size of the company, typically represented as the number of employees 
+          or by size category (e.g., small, medium, large).
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Small', 'Medium', 'Large']
+
+      - name: created_at
+        description: >
+          The timestamp indicating when the company was added.
+
+
+  - name: stg_sectors
+    description: >
+      Staging model for company sectors data. This model contains information 
+      on sectors which projects are bidded for.
+    columns:
+      - name: id
+        description: Unique identifier assigned to each sectors.
+        data_tests:
+          - not_null
+          - unique
+
+      - name: name
+        description: >
+          Sector category
+        data_tests:
+          - not_null
+          
+      - name: created_at
+        description: >
+          The timestamp indicating when the sector was added.
+
+  - name: stg_projects
+    description: >
+      Staging model for project proposals. This model prepares raw data 
+      related to project bids submitted on the platform. It includes key project metrics 
+      such as timelines, financial indicators (e.g., ROI), associated users, sectors, and 
+      companies, along with important status and milestone dates.
+
+    columns:
+      - name: id 
+        description: >
+          Unique identifier assigned to each project proposal.
+        data_tests:
+          - not_null
+          - unique
+
+      - name: project_name
+        description: >
+          The title or name of the proposed project.
+        data_tests: 
+          - not_null
+
+      - name: estimated_duration
+        description: >
+          The estimated duration (in months) required to complete the project.
+        data_tests:
+          - not_null
+          - no_zero_records:
+              arguments:
+                column_name: estimated_duration
+
+      - name: roi
+        description: >
+          The proposed return on investment (ROI) for the project (%).
+        data_tests:
+          - not_null
+          - no_zero_records:
+              arguments:
+                column_name: roi
+
+      - name: estimated_value
+        description: >
+          The estimated financial value of the project.
+        data_tests:
+          - not_null
+          - no_zero_records:
+              arguments:
+                column_name: estimated_value
+
+      - name: ESTIMATED_MONTHS_FOR_RETURNS
+        description: >
+          The estimated number of months expected before the project starts generating returns.
+        data_tests:
+          - not_null
+          - no_zero_records:
+              arguments:
+                column_name: ESTIMATED_MONTHS_FOR_RETURNS
+
+      - name: STATUS
+        description: >
+          The current status of the project proposal (pending, accepted, cancelled).
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['pending', 'accepted', 'cancelled']
+
+      - name: AWARD_DATE
+        description: >
+          The date on which the project was officially awarded.
+
+      - name: START_DATE
+        description: >
+          The scheduled or actual start date of the project execution phase.
+
+      - name: BID_DATE
+        description: >
+          The date when the project bid was submitted by the user or company.
+
+      - name: END_DATE
+        description: >
+          The scheduled or actual end date of the project.
+
+      - name: USER_ID
+        description: >
+          Foreign key reference to the user who submitted or is responsible for the project proposal.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_users')
+                field: id
+
+
+      - name: SECTOR_ID
+        description: >
+          Foreign key reference to the sector under which the project falls.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_sectors')
+                field: id
+
+      - name: COMPANY_ID
+        description: >
+          Foreign key reference to the company associated with the project proposal.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_companies')
+                field: id

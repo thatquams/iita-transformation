@@ -1,0 +1,64 @@
+version: 2
+
+models:
+  - name: mart_avg_mor_comp_sect
+    description: >
+      This model calculates the average months of returns for companies and sectors, providing insights into the expected financial performance of projects.
+
+    columns:
+      - name: company_name
+        description: >
+          The name of the company.
+
+      - name: PROJECT_SECTOR
+        description: >
+          The sector under which the project is registered.
+
+      - name: avg_estimated_months_for_returns
+        description: >
+          The average number of months expected for returns on investment across projects in the specified sector and company.
+
+  - name: mart_comp_avg_roi_est_value
+    description: >
+      This model computes the average return on investment (ROI) and estimated value of projects for each company, enabling performance comparison across companies.
+
+    columns:
+      - name: company_name
+        description: >
+          The name of the company.
+
+      - name: AVERAGE_ROI
+        description: >
+          The average return on investment (ROI) percentage for projects associated with the company.
+
+      - name: AVERAGE_ESTIMATED_VALUE
+        description: >
+          The average estimated financial value of projects associated with the company.
+
+  - name: mart_investment_sectors
+    description: >
+      This model averages investment data by sector, providing insights into the distribution of project funding across different sectors.
+    columns:
+      - name: PROJECT_SECTOR
+        description: >
+          The name of the sector.
+
+      - name: AVERAGE_ESTIMATED_VALUE
+        description: >
+          The average estimated financial value of projects within the sector.
+
+  - name: mart_projects_roi
+    description: >
+      This model calculates the return on investment (ROI) for projects, providing insights into the financial performance of project proposals.
+    columns:
+      - name: project_name
+        description: >
+          The name of the project.
+
+      - name: project_sector
+        description: >
+          The sector under which the project is registered.
+
+      - name: ROI
+        description: >
+          The anticipated return on investment (ROI) for the project, expressed as a percentage.

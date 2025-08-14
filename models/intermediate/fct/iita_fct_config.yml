@@ -1,0 +1,120 @@
+version: 2
+
+models:
+  - name: fct_projects_funding
+    description: >
+      Fact model capturing detailed metrics and funding-related information for project proposals. 
+      This model integrates key project bid attributes with their respective dimensions such as users, 
+      companies. It serves as a central fact table in the data warehouse, tracking project 
+      timelines, financial metrics (e.g., ROI, estimated value), and milestone dates throughout the 
+      project lifecycle, from bidding to completion.
+
+    columns:
+      - name: project_id
+        description: >
+          The natural key or unique identifier of the project, as sourced from the original project submission system.
+        data_tests:
+          - not_null
+          - unique
+
+
+      - name: projectKey
+        description: >
+          A system-generated surrogate key uniquely identifying each project within the data warehouse.
+          Used for establishing relationships with other dimensional tables.
+        data_tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('dim_projects')
+                field: projectKey
+
+      - name: estimated_duration
+        description: >
+          The projected duration of the project, expressed in months. Represents the estimated time 
+          from project start to completion.
+        data_tests:
+          - not_null
+          - no_zero_records:
+              arguments:
+                column_name: estimated_duration
+        
+      - name: RETURN_ON_INVESTMENT
+        description: >
+          The anticipated return on investment (ROI) for the project, expressed as a percentage.
+          This metric is used to evaluate the profitability of the proposed investment.
+        data_tests:
+          - not_null
+          - no_zero_records:
+              arguments:
+                column_name: RETURN_ON_INVESTMENT
+
+      - name: ESTIMATED_MONTHS_FOR_RETURNS
+        description: >
+          The estimated number of months after project initiation by which returns or benefits 
+          (financial or otherwise) are expected to be realized.
+        data_tests:
+          - not_null
+          - no_zero_records:
+              arguments:
+                column_name: ESTIMATED_MONTHS_FOR_RETURNS
+
+      - name: estimated_value
+        description: >
+          The projected financial value or cost estimate of the project. Typically includes capital 
+          expenditure, operational costs, or anticipated funding needs.
+        data_tests:
+          - not_null
+          - no_zero_records:
+              arguments:
+                column_name: estimated_value
+
+      - name: USERKEY
+        description: >
+          A surrogate key referencing the user dimension, indicating the individual who submitted 
+          or is responsible for the project proposal. Enables user-level analysis and joins with the 
+          users dimension table.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_users')
+                field: USERKEY
+
+      - name: COMPANYKEY
+        description: >
+          A surrogate key referencing the company dimension, identifying the organization 
+          associated with the project proposal. Useful for company-level reporting and aggregations.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_companies')
+                field: COMPANYKEY
+
+      - name: BID_DATE_KEY
+        description: >
+          A surrogate date key referencing the bid date of the project. Typically used to join with 
+          a date dimension for time-based analysis and reporting on project bidding activity.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+
+      - name: AWARD_DATE_KEY
+        description: >
+          A surrogate date key referencing when the project was awarded. Used to analyze the 
+          time lag between bidding and award, or for award date-based filtering.
+
+      - name: START_DATE_KEY
+        description: >
+          A surrogate date key representing the actual or planned start date of the project. 
+          Enables project start timelines and duration calculations.
+
+      - name: END_DATE_KEY
+        description: >
+          A surrogate date key indicating the actual or expected end date of the project. 
+          Useful for measuring delivery timelines, delays, or project completion metrics.

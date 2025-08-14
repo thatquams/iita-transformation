@@ -1,0 +1,21 @@
+version: 2
+
+
+sources:
+  - name: iita_agric
+    description: This is a data source
+
+    database: IITA_DB  
+    schema: IITA  
+    tables:
+      - name: src_companies
+        description: Contains records of companies that registered on the platform to submit project proposals.
+
+      - name: src_sectors
+        description: Contains records of sectors under which all projects were registered.
+
+      - name: src_users
+        description: Contains records of users who registered under a specific company to submit project proposals.
+
+      - name: src_projects
+        description: Contains fact-level records of all submitted project proposals.

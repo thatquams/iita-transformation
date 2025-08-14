@@ -1,0 +1,136 @@
+version: 2
+
+models:
+  - name: dim_users
+    description: >
+      model for user dimension. This model is for downstream transformation and analysis, including personal information and registration info.
+
+    columns:
+      - name: user_id
+        description: >
+          Unique identifier assigned to each user.
+        tests:
+          - not_null
+          - unique  
+
+      - name: userKey
+        description: >
+          Surrogate key generated for each user.
+        tests:
+          - not_null
+          - unique
+
+      - name: first_name
+        description: >
+          The first name of the user.
+        tests:
+          - not_null
+
+      - name: last_name
+        description: >
+          The last name or surname of the user.
+        tests:
+          - not_null
+
+      - name: dob
+        description: >
+          The user's date of birth.
+        tests:
+          - not_null
+
+      - name: gender
+        description: >
+          The user's gender as provided during registration.
+        tests:
+          - accepted_values:
+              values: ['female', 'male']
+
+      - name: date_created
+        description: >
+          The timestamp indicating when the user account was created on the platform.
+
+  - name: dim_companies
+    description: >
+      model for company data dimension. This model contains information 
+      collected during onboarding, including identifiers, names, and organization size.
+
+    columns:
+      - name: company_id
+        description: >
+          Unique identifier assigned to each company.
+        tests:
+          - not_null
+          - unique
+
+      - name: companyKey
+        description: >
+          Surrogate key generated for each company.
+        tests:
+          - not_null
+          - unique
+
+      - name: company_name
+        description: >
+          The registered name of the company or corporation.
+        tests:
+          - not_null
+
+      - name: company_size
+        description: >
+          The size of the company, typically represented as the number of employees 
+          or by size category.
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Small', 'Medium', 'Large']
+
+      - name: date_created
+        description: >
+          The timestamp indicating when the company was added.
+
+
+  - name: dim_projects
+    description: >
+      model for project data dimension. This model contains information 
+      on projects.
+    columns:
+      - name: project_id
+        description: Unique identifier assigned to each project.
+        tests:
+          - not_null
+          - unique
+
+      - name: projectKey
+        description: Surrogate key generated for each project.
+        tests:
+          - not_null
+          - unique
+
+      - name: project_name
+        description: >
+          The title or name of the proposed project.
+        tests:
+          - not_null
+
+      - name: project_sector
+        description: >
+          sector under which the project falls.
+        tests:
+          - not_null
+
+      - name: project_status
+        description: >
+          The current status of the project proposal (pending, accepted, cancelled).
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['pending', 'accepted', 'cancelled']
+
+      - name: date_created
+        description: >
+          The timestamp indicating when the sector was added.
+
+  - name: dim_date
+    description: >
+      Dimension table for date-related information. This model provides a comprehensive date dimension 
+      for time-based analysis, including day, month, quarter, and year attributes.
