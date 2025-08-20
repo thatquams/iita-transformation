@@ -1,0 +1,11 @@
+# version: "3.8"
+
+# services:
+#   smtp:
+#     image: smtpd
+#     ports:
+#       - "1025:1025"
+#     environment:
+#       - SMTPD_RELAY_HOST=smtp.example.com
+#       - SMTPD_RELAY_PORT=587
+#       -
